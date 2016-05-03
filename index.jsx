@@ -5,6 +5,7 @@ import { Component } from 'react'
 import { createStore } from 'redux'
 import { combineReducers } from 'redux'
 
+import AddTodo from './src/components/AddTodo.jsx'
 import TodoList from './src/components/TodoList.jsx'
 import FilterLink from './src/components/FilterLink.jsx'
 
@@ -76,18 +77,17 @@ const getVisibleTodos = (todos, filter) => {
 let nextTodoId = 0
 
 class TodoApp extends Component {
-	onSubmit(e) {
+	onAddTodo(input, e) {
 		e.preventDefault()
 
     store.dispatch({
       type: 'ADD_TODO',
-      text: this.input.value,
-      id: nextTodoId++
+      text: input.value,
+      id: nextTodoId += 1
     })
-    this.input.value = ''
   }
 
-	onTodoClick(id ) {
+	onTodoClick(id) {
     store.dispatch({
       type: 'TOGGLE_TODO',
       id
@@ -109,21 +109,18 @@ class TodoApp extends Component {
 
     return (
       <div>
-      	<form onSubmit={this.onSubmit.bind(this)}>
-	        <input ref={node => { this.input = node }} />
-	        <button type='submit'>Add Todo</button>
-        </form>
-          
+      	<AddTodo onAddTodo={this.onAddTodo} />
+
         <TodoList todos={visibleTodos} onTodoClick={this.onTodoClick} />
         
         <p>
           Show:
           {' '}
-          <FilterLink onFilterLinkClick={this.onFilterLinkClick} filter='SHOW_ALL' currentFilter={visibilityFilter}>All</FilterLink>
+          <FilterLink onClick={this.onFilterLinkClick} filter='SHOW_ALL' currentFilter={visibilityFilter}>All</FilterLink>
           {' '}
-          <FilterLink onFilterLinkClick={this.onFilterLinkClick} filter='SHOW_ACTIVE' currentFilter={visibilityFilter}>Active</FilterLink>
+          <FilterLink onClick={this.onFilterLinkClick} filter='SHOW_ACTIVE' currentFilter={visibilityFilter}>Active</FilterLink>
           {' '}
-          <FilterLink onFilterLinkClick={this.onFilterLinkClick} filter='SHOW_COMPLETED' currentFilter={visibilityFilter}>Completed</FilterLink>
+          <FilterLink onClick={this.onFilterLinkClick} filter='SHOW_COMPLETED' currentFilter={visibilityFilter}>Completed</FilterLink>
         </p>
       </div>
     )
